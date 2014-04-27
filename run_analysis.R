@@ -1,3 +1,5 @@
+library(reshape)
+
 # load activities labels
 activities_dt <- read.table("UCI HAR Dataset/activity_labels.txt")
 
@@ -38,14 +40,16 @@ df[,c("activity")] <- factor(df[,c("activity")], levels=activities_dt$V1, labels
 
 # create a dt with all the columns with substring mean() and std() inside the columnname and adding 
 # the columns of activities and subjects
-dt_mean_std <- df[, c(grep("\\-mean\\(\\)|\\-std\\(\\)",names(df), ignore.case = TRUE), 562, 563)]
+dt_mean_std <- df[, c(562, 563, grep("\\-mean\\(\\)|\\-std\\(\\)",names(df), ignore.case = TRUE))]
 
-# save the table created.
-write.table(dt_mean_std, "dt_mean_std.txt")
-
-#install.packages("reshape")
-
-library(reshape)
 dt_mean_std_melt <- melt(dt_mean_std, id=c("activity","subject"))
-dt_mean_std_melt_cast <- cast(dt_mean_std_melt, activity~subject~variable, mean)
-dt_mean_std_melt_cast <- as.data.frame(dt_mean_std_melt_cast)
+#dt_mean_std_melt_cast <- cast(dt_mean_std_melt, activity~subject~variable, mean)
+tidydf <- dcast(dt_mean_std_melt, activity + subject ~ variable, mean)
+
+namesbak <- names(tidydf)
+namesbak <- gsub("\\-mean", "Mean", namesbak)
+namesbak <- gsub("\\-std", "Std", namesbak)
+namesbak <- gsub("\\(\\)-", "", namesbak)
+namesbak <- gsub("\\(\\)", "", namesbak)
+names(tidydf) <- namesbak
+write.table(tidydf, "tidy.csv", sep=";")
