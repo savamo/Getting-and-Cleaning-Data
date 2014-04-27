@@ -1,4 +1,4 @@
-library(reshape)
+library(reshape2)
 
 # load activities labels
 activities_dt <- read.table("UCI HAR Dataset/activity_labels.txt")
