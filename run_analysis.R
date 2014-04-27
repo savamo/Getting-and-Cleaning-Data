@@ -52,4 +52,4 @@ namesbak <- gsub("\\-std", "Std", namesbak)
 namesbak <- gsub("\\(\\)-", "", namesbak)
 namesbak <- gsub("\\(\\)", "", namesbak)
 names(tidydf) <- namesbak
-write.table(tidydf, "tidy.csv", sep=";")
+write.table(tidydf, "tidy.csv", sep=",")
