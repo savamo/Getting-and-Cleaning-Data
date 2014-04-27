@@ -45,7 +45,6 @@ dt_mean_std <- df[, c(562, 563, grep("\\-mean\\(\\)|\\-std\\(\\)",names(df), ign
 write.table(dt_mean_std, "mean_std_dt.csv", sep=",")
 
 dt_mean_std_melt <- melt(dt_mean_std, id=c("activity","subject"))
-#dt_mean_std_melt_cast <- cast(dt_mean_std_melt, activity~subject~variable, mean)
 tidydf <- dcast(dt_mean_std_melt, activity + subject ~ variable, mean)
 
 namesbak <- names(tidydf)
